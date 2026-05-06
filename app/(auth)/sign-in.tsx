@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert, ActivityIndicator, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { supabase } from '../../lib/supabase';
@@ -13,6 +13,23 @@ export default function SignInScreen() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [errors, setErrors] = useState<{ email?: string, password?: string, confirmPassword?: string }>({});
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => setKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => setKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const validate = () => {
     let newErrors: { email?: string, password?: string, confirmPassword?: string } = {};
@@ -189,18 +206,20 @@ export default function SignInScreen() {
 
           </View>
 
-          <TouchableOpacity style={styles.submitButton} onPress={handleAuth} disabled={loading}>
-            <LinearGradient
-              colors={['#fff', '#f0f0f0']}
-              style={styles.submitButtonInner}
-            >
-              {loading ? (
-                <ActivityIndicator color="#4fb6ff" />
-              ) : (
-                <FontAwesome5 name="arrow-right" size={24} color="#4fb6ff" />
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
+          {!isKeyboardVisible && (
+            <TouchableOpacity style={styles.submitButton} onPress={handleAuth} disabled={loading}>
+              <LinearGradient
+                colors={['#fff', '#f0f0f0']}
+                style={styles.submitButtonInner}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#4fb6ff" />
+                ) : (
+                  <FontAwesome5 name="arrow-right" size={24} color="#4fb6ff" />
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
         </View>
 
       </LinearGradient>
