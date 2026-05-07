@@ -87,6 +87,8 @@ export default function MainLayout() {
       <Drawer.Screen name="index" options={{ title: 'S-NOTE' }} />
       <Drawer.Screen name="archives" options={{ title: 'S-NOTE' }} />
       <Drawer.Screen name="quiz/index" options={{ title: 'S-NOTE' }} />
+      <Drawer.Screen name="quiz/questions" options={{ drawerItemStyle: { display: 'none' }, title: 'S-NOTE' }} />
+      <Drawer.Screen name="quiz/result" options={{ drawerItemStyle: { display: 'none' }, title: 'S-NOTE' }} />
       <Drawer.Screen name="trash" options={{ title: 'S-NOTE' }} />
       <Drawer.Screen name="settings" options={{ title: 'S-NOTE' }} />
       <Drawer.Screen name="note/[id]" options={{ drawerItemStyle: { display: 'none' }, title: 'S-NOTE' }} />
